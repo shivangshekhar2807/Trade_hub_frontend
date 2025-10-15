@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { BASE_URL } from "@/utils/constant";
 import { Wallet, X, IndianRupee } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { clearUser, setUser } from "@/utils/redux/userSlice";
 
 declare global {
     interface Window {
@@ -18,7 +20,10 @@ const AppHeader: React.FC = () => {
     const [wallet, setWallet] = useState(0);
     const [showWalletPopup, setShowWalletPopup] = useState(false); 
     const [rechargeAmount, setRechargeAmount] = useState("");
+    const [userImage, setUserImage] = useState("");
+    const [userName, setUserName] = useState("");
     const [refresh, setRefresh] = useState(0);
+    const dispatch = useDispatch();
 
     console.log(pathname)
 
@@ -36,6 +41,9 @@ const AppHeader: React.FC = () => {
 
                 const data = await res.json();
                 setWallet(data.data.walletbalance)
+                setUserImage(data.data.photoUrl)
+                setUserName(data.data.firstName)
+                dispatch(setUser(data.data));
                 console.log(data)
             }
             catch (err:any) {
@@ -62,6 +70,7 @@ const AppHeader: React.FC = () => {
              })
             
             if (res.status == 201) {
+                dispatch(clearUser());
                 router.push("/auth")
             }
         }
@@ -121,7 +130,7 @@ const AppHeader: React.FC = () => {
                     color: "#F37254",
                 },
                 handler: function (response: any) {
-                    alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+                   
                     setShowWalletPopup(false);
                     setRechargeAmount("");
                     setRefresh(Math.random());
@@ -177,15 +186,7 @@ const AppHeader: React.FC = () => {
                            
                         </div>
                       
-                        {/* <Link
-                            href="/profile"
-                            className={`transition-colors ${pathname === "/profile"
-                                    ? "text-blue-500 font-semibold underline underline-offset-4"
-                                    : "hover:text-blue-400"
-                                }`}
-                        >
-                            Profile
-                        </Link> */}
+                       
                         <Link
                             href="/myProducts"
                             className={`transition-colors ${pathname === "/myProducts"
@@ -218,7 +219,17 @@ const AppHeader: React.FC = () => {
                             className="hover:text-blue-400 transition-colors cursor-default"
                         >
                             Logout
-                        </button>
+                            </button>
+                            
+                            {/* ✅ New user profile section */}
+                            <div className="flex items-center gap-2 bg-gray-700 px-3 py-1 rounded-full cursor-pointer hover:bg-gray-600 transition">
+                                <img
+                                    src={userImage || "/images/default-avatar.png"} // fallback image
+                                    alt="User Avatar"
+                                    className="w-8 h-8 rounded-full border border-gray-500"
+                                />
+                                <span className="text-sm font-medium text-white">{userName || "User"}</span>
+                            </div>
                     </nav>
                     )}
                 </div>

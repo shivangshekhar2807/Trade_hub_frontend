@@ -48,7 +48,7 @@ const AuthPage: React.FC = () => {
          
 
             const data = await res.json();
-            console.log("Login Data:", { loginEmail, loginPassword }, BASE_URL, data);
+          
 
           router.push('/')
 
@@ -83,7 +83,7 @@ const AuthPage: React.FC = () => {
             if (!res.ok) throw new Error("Signup failed");
 
             const data = await res.json();
-            console.log("Signup Successful:", data);
+           
             router.push('/')
            
         } catch (err:any) {

@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.9.0",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.23.24",
     "lucide-react": "^0.545.0",
@@ -15,6 +16,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.6.0",
+    "react-redux": "^9.2.0",
     "react-slick": "^0.31.0",
     "slick-carousel": "^1.8.1"
   },
