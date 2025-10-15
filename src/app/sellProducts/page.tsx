@@ -168,7 +168,7 @@ const MyReview: React.FC = () => {
                                             <h3 className="text-lg font-semibold text-gray-800 mb-1">
                                                 {productId.productType?.toUpperCase() || "PRODUCT"}
                                             </h3>
-                                            <h3 className="text-sm text-gray-600">{productId.city}</h3>
+                                            <h3 className="text-sm text-gray-600">{buyerId.city}</h3>
                                         </div>
 
                                         <div className="text-sm text-gray-600 mb-2">
