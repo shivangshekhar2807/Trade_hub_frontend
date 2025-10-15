@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import AppHeader from "./_components/AppHeader";
+import { Providers } from "./provider";
 
 
 export const metadata: Metadata = {
@@ -18,8 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-gray-100">
-        <AppHeader />
-        <main>{children}</main>
+        {/* <AppHeader /> */}
+        {/* <main>{children}</main> */}
+        <Providers>{children}</Providers>
         <Toaster
           position="top-center"
           toastOptions={{

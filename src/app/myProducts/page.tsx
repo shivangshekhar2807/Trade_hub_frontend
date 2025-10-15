@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { BASE_URL } from "@/utils/constant";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 interface Product {
     _id: string;
@@ -19,6 +20,7 @@ interface Product {
     productType: string;
     status: string;
     city: string;
+    productName:string
 }
 
 const MyProducts: React.FC = () => {
@@ -26,6 +28,8 @@ const MyProducts: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+
+    const userData = useSelector((state: any) => state.user);
 
     // Example: Fetch products from API
     useEffect(() => {
@@ -63,6 +67,16 @@ const MyProducts: React.FC = () => {
         slidesToScroll: 1,
     };
 
+    const handleAddProduct = async () => {
+       
+        if (userData.walletbalance < 10) {
+            toast.error("Sorry you cannot add more products because your wallet balance is low. Please recharge!!!");
+            return;
+        }
+
+        router.push('/addProduct')
+    }
+
     return (
         <div className="flex min-h-screen">
             {/* Sidebar */}
@@ -92,7 +106,7 @@ const MyProducts: React.FC = () => {
                 <button
                     className={`w-full py-2 rounded-md bg-gray-700 hover:bg-gray-600"
                         }`}
-                    onClick={() => router.push('/addProduct')}
+                    onClick={handleAddProduct}
                 >
                     +Add Product
                 </button>
@@ -150,9 +164,14 @@ const MyProducts: React.FC = () => {
                                 </div>
 
                                 <div className="p-4">
+                                    <div className="flex justify-between">
                                     <h3 className="text-lg font-semibold text-gray-800 mb-1">
                                         {product.productType.toUpperCase()}
                                     </h3>
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                                        {product.productName ||"N/A"}
+                                    </h3>
+                                    </div>
                                     <p className="text-sm text-gray-600 mb-2">
                                         {product.about.length > 80
                                             ? product.about.slice(0, 80) + "..."

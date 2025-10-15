@@ -17,6 +17,7 @@ interface Product {
     totalUsed: number;
     productImg: string[];
     productType: string;
+    productName:string
 }
 
 const EditProduct: React.FC = () => {
@@ -34,6 +35,7 @@ const EditProduct: React.FC = () => {
     const [totalUsed, setTotalUsed] = useState<number>(0);
     const [productType, setProductType] = useState("");
     const [productImg, setProductImg] = useState<string[]>([""]);
+      const [productName, setProductName] = useState("")
 
     // Fetch product details on mount
     useEffect(() => {
@@ -52,6 +54,7 @@ const EditProduct: React.FC = () => {
                 setTotalUsed(prod.totalUsed || 0);
                 setProductType(prod.productType || "");
                 setProductImg(prod.productImg || [""]);
+                setProductName(prod.productName||"")
             } catch (err) {
                 toast.error("Failed to load product details");
             } finally {
@@ -74,6 +77,7 @@ const EditProduct: React.FC = () => {
                 totalUsed,
                 productType,
                 productImg,
+                productName
             };
 
             const res = await fetch(`${BASE_URL}/user/product/${id}`, {
@@ -210,6 +214,19 @@ const EditProduct: React.FC = () => {
 
                     <div>
                         <label className="block mb-1 text-gray-800 font-semibold">
+                            Product Name
+                        </label>
+                        <input
+                            type="text"
+                            value={productName}
+                            onChange={(e) => setProductName(e.target.value)}
+                            className="w-full border border-gray-400 p-2 rounded-md text-gray-900"
+                        />
+                    </div>
+
+
+                    <div>
+                        <label className="block mb-1 text-gray-800 font-semibold">
                             Product Images (URLs)
                         </label>
                         {productImg.map((url, index) => (
@@ -260,9 +277,14 @@ const EditProduct: React.FC = () => {
                     )}
 
                     <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                            {productType.toUpperCase()}
-                        </h3>
+                        <div className="flex justify-between">
+                            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                {productType.toUpperCase() || "PRODUCT TYPE"}
+                            </h3>
+                            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                                {productName || "PRODUCT NAME"}
+                            </h3>
+                        </div>
                         <p className="text-sm text-gray-700 mb-2">{about}</p>
 
                         <div className="flex justify-between text-sm font-semibold">
@@ -276,7 +298,7 @@ const EditProduct: React.FC = () => {
                             <span>
                                 Purchased: {purchaseDate ? new Date(purchaseDate).toLocaleDateString() : "N/A"}
                             </span>
-                            <span>Used: {totalUsed} months</span>
+                            <span>Used: {totalUsed} Days</span>
                         </div>
                     </div>
                 </div>

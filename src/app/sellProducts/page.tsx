@@ -191,12 +191,22 @@ const MyReview: React.FC = () => {
                                             </span>
                                         </div>
 
-                                        <button
+                                        {productId.status !== "sold" && (<button
                                             onClick={() => handleSell(productId._id, _id, buyerId._id)}
                                             className="w-full mt-4 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
                                         >
                                             Sell
                                         </button>
+                                        )}
+                                        {productId.status == "sold" &&   ( <p
+                                            className={`mt-4 text-center text-sm font-medium rounded-md py-2 ${productId.status == "sold"
+                                                ? "bg-green-100 text-green-700"
+                                                : "bg-yellow-100 text-yellow-700"
+                                                }`}
+                                        >
+                                           You sold this product to someone else!!!
+                                        </p>
+                                         )}
                                     </div>
                                 </div>
                             );
