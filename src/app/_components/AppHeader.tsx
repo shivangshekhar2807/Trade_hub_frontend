@@ -1,16 +1,23 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { BASE_URL } from "@/utils/constant";
-import { Wallet, X, IndianRupee } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { Wallet, X, IndianRupee, Bell } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { clearUser, setUser } from "@/utils/redux/userSlice";
 
 declare global {
     interface Window {
         Razorpay: any;
     }
+}
+
+interface WeekEndOffer{
+
+    weekEndOffer: boolean,
+    weekEndOfferText:string
+
 }
 
 const AppHeader: React.FC = () => {
@@ -23,6 +30,20 @@ const AppHeader: React.FC = () => {
     const [userImage, setUserImage] = useState("");
     const [userName, setUserName] = useState("");
     const [refresh, setRefresh] = useState(0);
+
+    const [showNotification, setShowNotification] = useState(false);
+    const [hasNewNotification, setHasNewNotification] = useState(false);
+    const [totalNotification, setTotalNotification] = useState(0);
+    const [weekEndOffer, setWeenEndOffer] = useState<WeekEndOffer>({
+        weekEndOffer: false,
+        weekEndOfferText: ""
+    });
+    const [showWeekEndOffer,setShowWeekEndOffer]=useState(false)
+    const notifRef = useRef<HTMLDivElement>(null);
+
+
+    const refreshIcon=useSelector((state:any)=>state.refresh)
+
     const dispatch = useDispatch();
 
     console.log(pathname)
@@ -39,7 +60,19 @@ const AppHeader: React.FC = () => {
                     throw new Error("Could not fetch profile")
                 }
 
+                const noti = await fetch(`${BASE_URL}/user/notification`, { credentials: 'include' })
+
+                if (!noti.ok) {
+                    throw new Error("Could not fetch notification")
+                }
+
                 const data = await res.json();
+                const notiData = await noti.json();
+                if (notiData.count > 0) {
+                    setHasNewNotification(true)
+                    setTotalNotification(notiData.count)
+                }
+                setWeenEndOffer(data.data)
                 setWallet(data.data.walletbalance)
                 setUserImage(data.data.photoUrl)
                 setUserName(data.data.firstName)
@@ -52,7 +85,18 @@ const AppHeader: React.FC = () => {
         }
 
         fetchballance();
-    }, [pathname, refresh])
+    }, [pathname, refresh, refreshIcon])
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+                setShowNotification(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
 
     // ✅ Load Razorpay script once
     useEffect(() => {
@@ -160,7 +204,108 @@ const AppHeader: React.FC = () => {
                  
                     {pathname !== "/auth" && (<nav className="space-x-6 flex items-center">
                        
-                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 relative" ref={notifRef}>
+                          
+                                
+                               
+                                {/* <div
+                                    onClick={() => setShowNotification(!showNotification)}
+                                    className="relative cursor-pointer p-2 rounded-full hover:bg-gray-700 transition"
+                                >
+                                    
+                                    <Bell className="w-6 h-6 text-white" />
+                                    {hasNewNotification && (
+                                        <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+                                    )}
+
+                                   
+
+
+                                </div> */}
+
+                                {/* 🏷️ Weekend Offer Section */}
+                              
+
+                                <div className="flex items-center gap-2 relative">
+                                   
+                                    {/* {weekEndOffer.weekEndOffer && (<span className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white">
+                                        WEEKEND OFFER
+                                    </span>
+                                    )} */}
+
+
+                                    <div className="relative">
+                                        {weekEndOffer.weekEndOffer && (
+                                            <>
+                                                <span
+                                                    onClick={() =>
+                                                        setShowWeekEndOffer(true)
+                                                    }
+                                                    className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white cursor-pointer"
+                                                >
+                                                    WEEKEND OFFER
+                                                </span>
+
+                                                {/* 📦 Weekend Offer Popup */}
+                                                {showWeekEndOffer && (
+                                                    <div className="absolute top-7 left-0 bg-white shadow-lg rounded-lg p-4 w-56 text-gray-800 animate-fade-in z-50">
+                                                        <button
+                                                            onClick={() => setShowWeekEndOffer(false)}
+                                                            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                                                        >
+                                                            <X className="w-5 h-5" />
+                                                        </button>
+                                                        <p className="text-sm mb-3 text-center font-medium">
+                                                            {weekEndOffer.weekEndOfferText ||
+                                                                "Exclusive weekend deals available now! 🎉"}
+                                                        </p>
+                                                       
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </div>
+
+
+                                   
+                                    <div
+                                        onClick={() => setShowNotification(!showNotification)}
+                                        className="relative cursor-pointer p-2 rounded-full hover:bg-gray-700 transition"
+                                    >
+                                        <Bell className="w-6 h-6 text-white" />
+                                        {hasNewNotification && (
+                                            <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+                                        )}
+                                    </div>
+                                </div>
+
+
+                               
+
+                                {/* 📩 Notification Popup */}
+                                {showNotification && (
+                                    <div className="absolute top-12 left-0 bg-white shadow-lg rounded-lg p-4 w-56 text-gray-800 animate-fade-in z-50">
+                                        {hasNewNotification && (<p className="text-sm mb-3 text-center font-medium">
+                                            You have {totalNotification} buyers to buy your product. Kindly Check!!
+                                        </p>
+                                        )}
+                                        {!hasNewNotification && (<p className="text-sm mb-3 text-center font-medium">
+                                            You dont have any notification!!
+                                        </p>
+                                        )}
+                                        {hasNewNotification && (<button
+                                            onClick={() => {
+                                               
+                                                setShowNotification(false);
+                                                router.push('/notifications')
+                                            }}
+                                            className="w-full py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm"
+                                        >
+                                            View
+                                        </button>
+                                        )}
+                                    </div>
+                                )}
                          
                             <div
                                 onClick={() => setShowWalletPopup(true)}
@@ -281,7 +426,7 @@ const AppHeader: React.FC = () => {
                         {/* Button */}
                         <button
                             onClick={handleRecharge}
-                            className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all"
+                            className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all "
                         >
                             Recharge Now
                         </button>
