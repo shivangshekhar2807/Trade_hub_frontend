@@ -237,29 +237,57 @@ const AppHeader: React.FC = () => {
                                     <div className="relative">
                                         {weekEndOffer.weekEndOffer && (
                                             <>
+                                              
+
                                                 <span
-                                                    onClick={() =>
-                                                        setShowWeekEndOffer(true)
-                                                    }
-                                                    className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow-md border border-white cursor-pointer"
+                                                    onClick={() => setShowWeekEndOffer(true)}
+                                                    className="text-[11px] font-bold text-yellow-300 px-3 py-1 rounded-full border border-yellow-400 shadow-[0_0_10px_rgba(255,255,0,0.6)] cursor-pointer transition-all duration-200 hover:shadow-[0_0_20px_rgba(255,255,0,0.9)] hover:text-yellow-200 animate-pulse"
                                                 >
-                                                    WEEKEND OFFER
+                                                    ⚡ OFFER ⚡
                                                 </span>
 
                                                 {/* 📦 Weekend Offer Popup */}
                                                 {showWeekEndOffer && (
-                                                    <div className="absolute top-7 left-0 bg-white shadow-lg rounded-lg p-4 w-56 text-gray-800 animate-fade-in z-50">
+                                                    // <div className="absolute top-7 left-0 bg-white shadow-lg rounded-lg p-4 w-56 text-gray-800 animate-fade-in z-50">
+                                                    //     <button
+                                                    //         onClick={() => setShowWeekEndOffer(false)}
+                                                    //         className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                                                    //     >
+                                                    //         <X className="w-5 h-5" />
+                                                    //     </button>
+                                                    //     <p className="text-sm mb-3 text-center font-medium">
+                                                    //         {weekEndOffer.weekEndOfferText ||
+                                                    //             "Exclusive weekend deals available now! 🎉"}
+                                                    //     </p>
+                                                       
+                                                    // </div>
+
+                                                    <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border border-yellow-400 shadow-[0_0_25px_rgba(255,255,0,0.4)] rounded-xl p-5 w-64 text-yellow-300 animate-fade-in z-50 transform transition-all duration-300 hover:shadow-[0_0_35px_rgba(255,255,0,0.7)]">
+                                                        {/* ❌ Close Button */}
                                                         <button
                                                             onClick={() => setShowWeekEndOffer(false)}
-                                                            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                                                            className="absolute top-2 right-2 text-yellow-300 hover:text-yellow-100 transition-transform hover:scale-110"
                                                         >
                                                             <X className="w-5 h-5" />
                                                         </button>
-                                                        <p className="text-sm mb-3 text-center font-medium">
-                                                            {weekEndOffer.weekEndOfferText ||
-                                                                "Exclusive weekend deals available now! 🎉"}
-                                                        </p>
-                                                       
+
+                                                        {/* 💬 Message */}
+                                                        <div className="flex flex-col items-center text-center space-y-3">
+                                                            <p className="text-sm font-semibold tracking-wide leading-relaxed">
+                                                                {weekEndOffer.weekEndOfferText || "⚡ Exclusive Weekend Deals Await! 🎉"}
+                                                            </p>
+
+                                                            {/* 🌟 Divider Glow Line */}
+                                                            <div className="w-10 h-[2px] bg-yellow-400 shadow-[0_0_10px_rgba(255,255,0,0.6)] mx-auto"></div>
+
+                                                            {/* 🎁 CTA Button (optional) */}
+                                                            <button
+                                                                onClick={() => setShowWalletPopup(true)}
+                                                                className="mt-2 px-4 py-1.5 bg-yellow-400 text-gray-900 font-bold rounded-full shadow-[0_0_10px_rgba(255,255,0,0.6)] hover:shadow-[0_0_15px_rgba(255,255,0,0.9)] hover:scale-105 transition-transform duration-200"
+                                                            >
+                                                                Grab Offer
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 )}
                                             </>
