@@ -38,7 +38,7 @@ const AddProduct: React.FC = () => {
     const handleAddProduct = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (userData.walletbalance < 10) {
+        if ((userData?.walletbalance ?? 0) < 10) {
             toast.error("Sorry you cannot add more products because your wallet balance is low. Please recharge!!!");
             return;
         }
@@ -278,7 +278,7 @@ const AddProduct: React.FC = () => {
 
                         <div className="flex justify-between">
                             <h3 className="text-gray-500 mt-2">Wallet Balance</h3>
-                            <h3 className="text-gray-900 mt-2">  ₹{userData.walletbalance}</h3>
+                            <h3 className="text-gray-900 mt-2">  ₹{userData?.walletbalance ?? 0}</h3>
                         </div>
 
                         <div className="flex justify-between">
