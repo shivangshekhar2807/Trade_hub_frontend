@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import toast from "react-hot-toast";
 import { BASE_URL } from "@/utils/constant";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 interface Review {
     _id: string;
@@ -31,6 +32,7 @@ interface Review {
         phone: string;
         city: string;
     };
+    dealStatus: "pending" | "done";
     createdAt: string;
     updatedAt: string;
 }
@@ -39,7 +41,8 @@ const MyReview: React.FC = () => {
     const [filter, setFilter] = useState<"all" | "electronics" | "fashion" | "daily">("all");
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(false);
-    const [refresh,setRefresh]=useState(0)
+    const [refresh, setRefresh] = useState(0)
+    const router = useRouter();
 
     const sliderSettings = {
         dots: true,
@@ -143,7 +146,8 @@ const MyReview: React.FC = () => {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {reviews.map((review) => {
-                            const { productId, buyerId,_id } = review;
+                            const { productId, buyerId, _id } = review;
+                            const id = `${review._id}_${review.productId._id}_${review.sellerId._id}_${review.buyerId._id}`;
                             return (
                                 <div
                                     key={review._id}
@@ -168,7 +172,11 @@ const MyReview: React.FC = () => {
                                             <h3 className="text-lg font-semibold text-gray-800 mb-1">
                                                 {productId.productType?.toUpperCase() || "PRODUCT"}
                                             </h3>
-                                            <h3 className="text-sm text-gray-600">{buyerId.city}</h3>
+                                            {/* <h3 className="text-sm text-gray-600">{buyerId.city}</h3> */}
+                                            {(review.dealStatus == "pending" && review.productId.status == "unsold") && (<button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-full shadow-md hover:from-indigo-600 hover:to-blue-500 hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out" onClick={() => router.push(`/Chat/${id}`)}>
+                                                Chat
+                                            </button>
+                                            )}
                                         </div>
 
                                         <div className="text-sm text-gray-600 mb-2">
@@ -176,9 +184,13 @@ const MyReview: React.FC = () => {
                                                 <strong>Buyer:</strong>{" "}
                                                 {buyerId.firstName || "Unknown"}{" "}
                                                 {buyerId.lastName || ""}
+                                                
                                             </p>
                                             <p>
                                                 <strong>Phone:</strong> {buyerId.phone}
+                                            </p>
+                                            <p>
+                                                <strong>City:</strong> {buyerId.city}
                                             </p>
                                         </div>
 

@@ -1,18 +1,3 @@
-// import { NextRequest, NextResponse } from "next/server";
-
-// export function middleware(request: NextRequest) {
-
-//    if (request.cookies.get("Token")) {
-//     if (
-//       request.nextUrl.pathname === "/auth" 
-//     ) {
-//       return NextResponse.redirect(new URL("/", request.nextUrl.origin));
-//     }
-//   } else if (request.nextUrl.pathname === "/") {
-//     return NextResponse.redirect(new URL("/auth", request.nextUrl.origin));
-//   }
-// }
-
 
 import { NextRequest, NextResponse } from "next/server";
 
