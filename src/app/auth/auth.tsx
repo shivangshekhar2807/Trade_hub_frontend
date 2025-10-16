@@ -9,8 +9,8 @@ const AuthPage: React.FC = () => {
 
 
     // Login form state
-    const [loginEmail, setLoginEmail] = useState("shivang@gmail.com");
-    const [loginPassword, setLoginPassword] = useState("Ss@621311");
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
 
     // Signup form state
     const [signupEmail, setSignupEmail] = useState("");

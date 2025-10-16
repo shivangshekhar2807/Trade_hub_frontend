@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import toast from "react-hot-toast";
 import { BASE_URL } from "@/utils/constant";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 interface Deal {
     _id: string;
@@ -39,6 +40,8 @@ const MyDeals: React.FC = () => {
     const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
     const [deals, setDeals] = useState<Deal[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
 
     const sliderSettings = {
         dots: true,
@@ -130,6 +133,7 @@ const MyDeals: React.FC = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {deals.map((deal) => {
                             const { productId, sellerId } = deal;
+                            const id = `${deal._id}_${deal.productId._id}_${deal.sellerId._id}_${deal.buyerId._id}`;
                             return (
                                 <div
                                     key={deal._id}
@@ -150,9 +154,17 @@ const MyDeals: React.FC = () => {
                                     </div>
 
                                     <div className="p-4">
+                                        <div className="flex justify-between">
+                                      
                                         <h3 className="text-lg font-semibold text-gray-800 mb-1">
                                             {productId.city.toUpperCase()}
-                                        </h3>
+                                            </h3>
+                                            {(deal.dealStatus == "pending" && deal.productId.status == "unsold") && (<button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-full shadow-md hover:from-indigo-600 hover:to-blue-500 hover:shadow-lg transform hover:scale-105 transition-all duration-300 ease-in-out" onClick={() => router.push(`/Chat/${id}`)}>
+                                                Chat
+                                            </button>
+                                            )}
+                                            
+                                        </div>
 
                                         <div className="text-sm text-gray-600 mb-2">
                                             <p>
